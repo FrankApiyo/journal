@@ -378,7 +378,7 @@ defmodule Journal.Accounts do
 
   """
   def authenticate_user(email, password) do
-    user = Repo.get(User, email: email)
+    user = Repo.get_by(User, email: email)
 
     case user do
       nil ->

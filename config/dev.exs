@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :journal, Journal.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "journal_user",
+  password: "journal_pazzwerdz",
   hostname: "localhost",
-  database: "journal_dev",
+  database: "journal_db",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
