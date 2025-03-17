@@ -17,6 +17,14 @@ defmodule JournalWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :openapi_spec do
+    plug OpenApiSpex.Plug.PutApiSpec, module: JournalWeb.ApiSpec
+  end
+
+  pipeline :x_api_auth do
+    plug JournalWeb.Plugs.RequireSignupToken
+  end
+
   pipeline :api_auth do
     plug Guardian.Plug.Pipeline,
       module: Journal.Guardian,
@@ -36,10 +44,24 @@ defmodule JournalWeb.Router do
   scope "/api", JournalWeb do
     pipe_through :api
 
-    post "/signup", AuthController, :signup
-    post "/login", AuthController, :login
+    scope "/" do
+      pipe_through :x_api_auth
+      post "/signup", AuthController, :signup
+      post "/login", AuthController, :login
+    end
 
     # TODO: Add routes for getting journals
+  end
+
+  scope "/" do
+    pipe_through :browser
+
+    get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/openapi"
+  end
+
+  scope "/" do
+    pipe_through :openapi_spec
+    get "/openapi", OpenApiSpex.Plug.RenderSpec, []
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

@@ -11,6 +11,9 @@ config :journal, Journal.Guardian,
   issuer: "journal",
   secret_key: "so5Iq0d0Bs0vsaUarWwh7g4m3sTDz/a3Ntk61oBhTYlimUQaOUe7kZA6Wh5lsdj1"
 
+config :journal, :api_auth,
+  signup_token: "k4qhpO0a9jTWukZIcgw3SwoBmXW62X+y3X1jit8GkAknmdb9u2r8IoYOF5FS36sB"
+
 config :journal,
   ecto_repos: [Journal.Repo],
   generators: [timestamp_type: :utc_datetime]

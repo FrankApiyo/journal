@@ -4,6 +4,12 @@ defmodule JournalWeb.AuthControllerTest do
   @valid_attrs %{"email" => "test@example.com", "password" => "securepassword"}
   @invalid_attrs %{"email" => "test@example.com", "password" => "secret"}
   @login_invalid_attrs %{"email" => "test@example.com", "password" => "wrongpassword"}
+  @api_key Application.compile_env!(:journal, :api_auth)[:signup_token]
+
+  setup %{conn: conn} do
+    conn = put_req_header(conn, "x-api-key", @api_key)
+    {:ok, conn: conn}
+  end
 
   describe "POST /api/signup" do
     test "returns error when password is too short", %{conn: conn} do

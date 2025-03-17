@@ -32,6 +32,7 @@ defmodule Journal.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:open_api_spex, "~> 3.21"},
       {:guardian, "~> 2.3"},
       {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.18"},
