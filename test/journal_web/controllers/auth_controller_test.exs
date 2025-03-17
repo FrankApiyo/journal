@@ -42,12 +42,21 @@ defmodule JournalWeb.AuthControllerTest do
       {:ok, conn: conn, user: user}
     end
 
-    test "logs in with valid credentials and returns a token", %{conn: conn} do
+    test "logs in with valid credentials and returns a valid token", %{conn: conn, user: user} do
       conn = post(conn, ~p"/api/login", @valid_attrs)
       response = json_response(conn, 200)
 
       assert Map.has_key?(response, "token")
-      assert is_binary(response["token"])
+      token = response["token"]
+      assert is_binary(token)
+
+      # Is this token valid?
+      assert {:ok, claims} = Journal.Guardian.decode_and_verify(token)
+
+      # Verify the token contains a user ID (or expected claim)
+      assert Map.has_key?(claims, "sub")
+      assert is_binary(claims["sub"])
+      assert String.to_integer(claims["sub"]) == user.id
     end
 
     test "returns error with invalid credentials", %{conn: conn} do
