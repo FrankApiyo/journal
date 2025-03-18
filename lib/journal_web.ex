@@ -87,6 +87,9 @@ defmodule JournalWeb do
 
       # HTML escaping functionality
       import Phoenix.HTML
+
+      import LiveSvelte
+
       # Core UI components
       import JournalWeb.CoreComponents
 
