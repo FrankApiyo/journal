@@ -32,6 +32,7 @@ defmodule Journal.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:live_svelte, "~> 0.15.0"},
       {:open_api_spex, "~> 3.21"},
       {:guardian, "~> 2.3"},
       {:bcrypt_elixir, "~> 3.0"},
@@ -44,7 +45,6 @@ defmodule Journal.MixProject do
       {:phoenix_live_view, "~> 1.0.0"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
@@ -72,17 +72,17 @@ defmodule Journal.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "assets.setup"],
+      "assets.deploy": [
+        "tailwind jorunal --minify",
+        "cmd --cd assets node build.js --deploy",
+        "phx.digest"
+      ],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind journal", "esbuild journal"],
-      "assets.deploy": [
-        "tailwind journal --minify",
-        "esbuild journal --minify",
-        "phx.digest"
-      ]
+      "assets.setup": ["tailwind.install --if-missing", "cmd --cd assets npm install"],
+      "assets.build": ["tailwind journal", "cmd --cd assets node build.js"]
     ]
   end
 end

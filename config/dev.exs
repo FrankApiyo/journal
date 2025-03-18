@@ -28,7 +28,7 @@ config :journal, JournalWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "15r/54bp/B8VWsBbipuf//bX5WVntc7x+Nk/0KK7kl2oJIlDw5yor1Ej1+9tN78Q",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:journal, ~w(--sourcemap=inline --watch)]},
+    node: ["build.js", "--watch", cd: Path.expand("../assets", __DIR__)],
     tailwind: {Tailwind, :install_and_run, [:journal, ~w(--watch)]}
   ]
 
